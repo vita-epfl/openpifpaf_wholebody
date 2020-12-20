@@ -41,9 +41,9 @@ To evaluate your network you can use the following command:<br/>
 
 ## Using only a subset of keypoints
 If you only want to train on a subset of keypoints, e.g. if you do not need the facial keypoints and only want to train on the body, foot and hand keypoints, it should be fairly easy to just train on this subset. You will need to:
--Download the original annotation files from the [Coco Whole body page](https://github.com/jin-s13/COCO-WholeBody#download). Create a new annotations file with [Get_annotations_from_coco_wholebody.py](/Helper_scripts/Get_annotations_from_coco_wholebody.py). Set `ann_types`to the keypoints that you would like to use and create the train and val json file. You can use [Visualize_annotations.py](/Helper_scripts/Visualize_annotations.py.py) to verify that the json file was created correctly.
--In the [constants.py](/openpifpaf_wholebody/constants.py) file comment out all the parts of the skeleton, pose, HFLIP, SIGMA and keypoint names that you do not need. All these constants are already split up in the body parts. The numbering of the joints may now be different (e.g. when you discard the face kpts, but keep the hand kpts), so you need to adjust the numbers in the skeleton definitions to be consisten with the new numbering of the joints.
--That's it! You can train the model with a subset of keypoints.
+- Download the original annotation files from the [Coco Whole body page](https://github.com/jin-s13/COCO-WholeBody#download). Create a new annotations file with [Get_annotations_from_coco_wholebody.py](/Helper_scripts/Get_annotations_from_coco_wholebody.py). Set `ann_types`to the keypoints that you would like to use and create the train and val json file. You can use [Visualize_annotations.py](/Helper_scripts/Visualize_annotations.py.py) to verify that the json file was created correctly.
+- In the [constants.py](/openpifpaf_wholebody/constants.py) file comment out all the parts of the skeleton, pose, HFLIP, SIGMA and keypoint names that you do not need. All these constants are already split up in the body parts. The numbering of the joints may now be different (e.g. when you discard the face kpts, but keep the hand kpts), so you need to adjust the numbers in the skeleton definitions to be consisten with the new numbering of the joints.
+- That's it! You can train the model with a subset of keypoints.
 
 ##Further informations
 For more information refer to the [Pifpaf Dev Guide](https://vita-epfl.github.io/openpifpaf/dev/intro.html).
