@@ -45,5 +45,5 @@ If you only want to train on a subset of keypoints, e.g. if you do not need the 
 - In the [constants.py](/openpifpaf_wholebody/constants.py) file comment out all the parts of the skeleton, pose, HFLIP, SIGMA and keypoint names that you do not need. All these constants are already split up in the body parts. The numbering of the joints may now be different (e.g. when you discard the face kpts, but keep the hand kpts), so you need to adjust the numbers in the skeleton definitions to be consisten with the new numbering of the joints.
 - That's it! You can train the model with a subset of keypoints.
 
-##Further informations
+## Further informations
 For more information refer to the [Pifpaf Dev Guide](https://vita-epfl.github.io/openpifpaf/dev/intro.html).

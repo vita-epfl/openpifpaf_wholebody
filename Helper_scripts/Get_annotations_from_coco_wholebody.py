@@ -1,7 +1,7 @@
 import json
 import copy
 
-### List of all the annotation typs the should be used ###
+### List of all the annotation types that should be used ###
 ann_types = ["keypoints", "foot_kpts", "face_kpts", "lefthand_kpts", "righthand_kpts"]
 
 # =============================================================================
@@ -33,6 +33,7 @@ for ann_dict in orig_data["annotations"]:
         for key in ann_types:
             ann = ann + ann_dict[key]
         new_dict["keypoints"] = ann
+        new_dict['num_keypoints'] = sum(x>0 for x in ann[2::3])
         new_data["annotations"].append(new_dict)
     else:
         discard_count+=1
