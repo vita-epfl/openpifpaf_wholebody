@@ -101,7 +101,7 @@ class WholeBodyMetric(Base):
 
         # force at least one annotation per image (for pycocotools)
         if not image_annotations:
-            n_keypoints = len(sigmas)
+            n_keypoints = len(self.keypoint_oks_sigmas)
             image_annotations.append({
                 'image_id': image_id,
                 'category_id': 1,
