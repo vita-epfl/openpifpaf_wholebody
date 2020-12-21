@@ -24,7 +24,7 @@ Note: The pifpaf style annotation files were create with [Get_annotations_from_c
 ## Show poses
 Visualize the human poses with 133 keypoints.
 ```
-python -m openpifpaf_foot.constants
+python -m openpifpaf_wholebody.constants
 ```
 
 ## Predict
