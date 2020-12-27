@@ -29,10 +29,10 @@ class WholeBodyKp(DataModule):
     #Coco whole body has no test dataset
 
     # cli configurable
-    train_annotations = 'data-mscoco/annotations/person_keypoints_train2017_wholebody_pifpaf_style.json'
-    val_annotations = 'data-mscoco/annotations/person_keypoints_val2017_wholebody_pifpaf_style.json'
-    train_image_dir = 'data-mscoco/images/train2017/'
-    val_image_dir = 'data-mscoco/images/val2017'
+    train_annotations = 'openpifpaf_wholebody/data-mscoco/annotations/person_keypoints_train2017_wholebody_pifpaf_style.json'
+    val_annotations = 'openpifpaf_wholebody/data-mscoco/annotations/person_keypoints_val2017_wholebody_pifpaf_style.json'
+    train_image_dir = 'openpifpaf_wholebody/data-mscoco/images/train2017/'
+    val_image_dir = 'openpifpaf_wholebody/data-mscoco/images/val2017'
      
     square_edge = 385
     extended_scale = False
