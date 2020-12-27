@@ -11,5 +11,4 @@ module load gcc cuda cudnn python/3.7.7
 
 /bin/bash -c "source dev_pifpaf/bin/activate"
 cd openpifpaf
-cd openpifpaf_whole_body
 /bin/bash -c "time CUDA_VISIBLE_DEVICES=0,1 python -m openpifpaf.eval $(printf "%s " "$@")"
