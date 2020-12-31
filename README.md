@@ -29,7 +29,8 @@ python -m openpifpaf_wholebody.constants
 
 ## Predict
 Use the pretrained model to perform a prediction:<br/>
-`python -m openpifpaf.predict ./data-mscoco/images/val2017/000000062355.jpg --checkpoint=shufflenetv2k16-wholebody --show`
+`python -m openpifpaf.predict ./data-mscoco/images/val2017/000000062355.jpg --checkpoint=shufflenetv2k30-wholebody --show --line-width=1 --decoder=cifcaf:0`
+Note that `--decoder=cifcaf:0` has to be used to use the first decoder. As the pretrained model was trained on two datasets to achieve better performance, it has two decoders.
 
 ## Train
 If you don't want to use the pre-trained model, you can train a model from scratch (Note: This can take several days, even on the most modern GPUs):<br/>
