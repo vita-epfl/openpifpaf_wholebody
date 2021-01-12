@@ -27,7 +27,8 @@ class WholeBodyMetric(Base):
                  category_ids=None,
                  iou_type='keypoints',
                  small_threshold=0.0,
-                 keypoint_oks_sigmas=None):
+                 keypoint_oks_sigmas=None,
+                 kps_select = "all"):
         super().__init__()
 
         if category_ids is None:
@@ -39,6 +40,7 @@ class WholeBodyMetric(Base):
         self.iou_type = iou_type
         self.small_threshold = small_threshold
         self.keypoint_oks_sigmas = keypoint_oks_sigmas
+        self.kps_select = kps_select
 
         self.predictions = []
         self.image_ids = []
@@ -63,6 +65,16 @@ class WholeBodyMetric(Base):
 
         coco_eval = self.coco.loadRes(predictions)
         
+        if self.kps_select=='only_body':
+            text = "Results for considering ONLY body keypoints"
+            # assert len(self.coco.anns[self.coco.anns.keys()[0]]['keypoints'])==17, "When evaluating only body, please provide an annotation val file with only the 17 body kps"
+            for count in range(len(coco_eval.anns)):
+                coco_eval.anns[count+1]['keypoints']=coco_eval.anns[count+1]['keypoints'][0:51]      
+        elif self.kps_select=='all':
+            text = "Results for considering body and foot keypoints"
+        else:
+            raise Exception('Keypoints for evaluation need to be specified: only_body or all')
+        
         self.eval = COCOeval(self.coco, coco_eval, iouType=self.iou_type)
         LOG.info('cat_ids: %s', self.category_ids)
         if self.category_ids:
@@ -74,6 +86,7 @@ class WholeBodyMetric(Base):
             print('image ids', image_ids)
             self.eval.params.imgIds = image_ids
         self.eval.evaluate()
+        LOG.info("\n\n#########   "+text+"   ######### \n")
         self.eval.accumulate()
         self.eval.summarize()
         return self.eval.stats
@@ -101,7 +114,7 @@ class WholeBodyMetric(Base):
 
         # force at least one annotation per image (for pycocotools)
         if not image_annotations:
-            n_keypoints = len(self.keypoint_oks_sigmas)
+            n_keypoints = 133
             image_annotations.append({
                 'image_id': image_id,
                 'category_id': 1,

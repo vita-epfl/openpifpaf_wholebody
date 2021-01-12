@@ -303,10 +303,21 @@ class WholeBodyKp(DataModule):
             collate_fn=collate_images_anns_meta)
 
     def metrics(self):
-        return [WholeBodyMetric(
-            pycocotools.coco.COCO(self.eval_annotations),
-            max_per_image=20,
-            category_ids=[1],
-            iou_type='keypoints',
-            keypoint_oks_sigmas = WHOLEBODY_SIGMAS
-        )]
+        if self.only_body_kps:
+            return [WholeBodyMetric(
+                pycocotools.coco.COCO(self.eval_annotations),
+                max_per_image=20,
+                category_ids=[1],
+                iou_type='keypoints',
+                keypoint_oks_sigmas = None,
+                kps_select = "only_body")
+                ]
+        else:
+            return [WholeBodyMetric(
+                pycocotools.coco.COCO(self.eval_annotations),
+                max_per_image=20,
+                category_ids=[1],
+                iou_type='keypoints',
+                keypoint_oks_sigmas = WHOLEBODY_SIGMAS,
+                kps_select = "all")
+                ]
