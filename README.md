@@ -1,5 +1,9 @@
 # openpifpaf_wholebody
-This is an extension to [Pifpaf](https://github.com/vita-epfl/openpifpaf) to detect body, foot, face and hand keypoints, which sum up to 133 keypoints per person. The annotations for these keypoints are taken from the [COCO WholeBody dataset](https://github.com/jin-s13/COCO-WholeBody).
+This is an extension to [Pifpaf](https://github.com/vita-epfl/openpifpaf) to detect body, foot, face and hand keypoints, which sum up to 133 keypoints per person. The annotations for these keypoints are taken from the [COCO WholeBody dataset](https://github.com/jin-s13/COCO-WholeBody). <br/> Example outputs:
+![Basketball1](/docs/0001.png)
+![Basketball2](/docs/0002.png)
+Skeleton with 133 keypoints:
+![Skeleton](/docs/skeleton_wholebody.png)
 
 ## Getting started
 Start in an empty folder. Create an environment, clone the pifpaf dev branch and install pifpaf:
@@ -24,13 +28,13 @@ Note: The pifpaf style annotation files were create with [Get_annotations_from_c
 ## Show poses
 Visualize the human poses with 133 keypoints.
 ```
-python -m openpifpaf_wholebody.constants
+python -m openpifpaf_wholebody.src.constants
 ```
 
 ## Predict
 Use the pretrained model to perform a prediction:<br/>
-`python -m openpifpaf.predict ./data-mscoco/images/val2017/000000062355.jpg --checkpoint=shufflenetv2k30-wholebody --show --line-width=1 --decoder=cifcaf:0`
-Note that `--decoder=cifcaf:0` has to be used to use the first decoder. As the pretrained model was trained on two datasets to achieve better performance, it has two decoders.
+`python -m openpifpaf.predict ./openpifpaf_wholebody/docs/0001basketball.jpeg --checkpoint=shufflenetv2k30-wholebody --show --line-width=1 --decoder=cifcaf:0`
+<br/> <br/> Note that `--decoder=cifcaf:0` has to be used to use the first decoder. As the pretrained model was trained on two datasets to achieve better performance, it has two decoders.
 
 ## Train
 If you don't want to use the pre-trained model, you can train a model from scratch (Note: This can take several days, even on the most modern GPUs):<br/>
