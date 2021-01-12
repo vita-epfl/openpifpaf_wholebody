@@ -1,8 +1,7 @@
 # openpifpaf_wholebody
-This is an extension to [Pifpaf](https://github.com/vita-epfl/openpifpaf) to detect body, foot, face and hand keypoints, which sum up to 133 keypoints per person. The annotations for these keypoints are taken from the [COCO WholeBody dataset](https://github.com/jin-s13/COCO-WholeBody). <br/> Example outputs:
+This is an extension to [Pifpaf](https://github.com/vita-epfl/openpifpaf) to detect body, foot, face and hand keypoints, which sum up to 133 keypoints per person. The annotations for these keypoints are taken from the [COCO WholeBody dataset](https://github.com/jin-s13/COCO-WholeBody). <br/> Example outputs and skeleton:
 ![Basketball1](/docs/0001.png)
 ![Basketball2](/docs/0002.png)
-Skeleton with 133 keypoints:
 ![Skeleton](/docs/skeleton_wholebody.png)
 
 ## Getting started
