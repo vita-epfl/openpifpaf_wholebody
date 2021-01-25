@@ -71,7 +71,7 @@ class WholeBodyMetric(Base):
             for count in range(len(coco_eval.anns)):
                 coco_eval.anns[count+1]['keypoints']=coco_eval.anns[count+1]['keypoints'][0:51]      
         elif self.kps_select=='all':
-            text = "Results for considering body and foot keypoints"
+            text = "Results for considering all 133 keypoints"
         else:
             raise Exception('Keypoints for evaluation need to be specified: only_body or all')
         
