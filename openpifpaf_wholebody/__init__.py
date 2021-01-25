@@ -1,6 +1,6 @@
 import openpifpaf
 
-from .src import wholebodykp
+from . import wholebodykp
 
 def register():
     openpifpaf.DATAMODULES['wholebodykp'] = wholebodykp.WholeBodyKp

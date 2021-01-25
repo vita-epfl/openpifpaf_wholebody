@@ -4,6 +4,13 @@ This is an extension to [Pifpaf](https://github.com/vita-epfl/openpifpaf) to det
 ![Basketball2](/docs/0002.png)
 ![Skeleton](/docs/skeleton_wholebody.png)
 
+## Quick install via pip
+You can use pip to install openpifpaf wholebody. From the openpifpaf_wholebody folder run:
+```
+pip3 install --editable .
+```
+This will also automatically install openpifpaf, if it is not already installed.
+
 ## Getting started
 Start in an empty folder. Create an environment, clone the pifpaf dev branch and install pifpaf:
 ```
