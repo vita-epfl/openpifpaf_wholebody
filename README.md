@@ -17,26 +17,6 @@ pip3 install openpifpaf_wholebody
 ```
 This will also automatically install openpifpaf, if it is not already installed.
 
-## Getting started
-Start in an empty folder. Create an environment, clone the pifpaf dev branch and install pifpaf:
-```
-git clone --single-branch --branch dev https://github.com/vita-epfl/openpifpaf.git
-python3 -m venv ./pifpaf_env
-source ./pifpaf_env/bin/activate 
-cd openpifpaf
-pip3 install --editable '.[dev,train,test]'
-```
-Finally, clone the pifpaf foot extension and soft link the ms coco annotations and images, and download the wholebody annotations:
-```
-git clone https://github.com/vita-epfl/openpifpaf_wholebody.git
-mkdir ./openpifpaf_wholebody/data-mscoco
-ln -s /<PathToYourMSCOCO>/data-mscoco/images ./openpifpaf_wholebody/data-mscoco/images
-ln -s /<PathToYourMSCOCO>/data-mscoco/annotations ./openpifpaf_wholebody/data-mscoco/annotations
-wget https://github.com/DuncanZauss/openpifpaf_assets/releases/download/v0.1.0/person_keypoints_train2017_wholebody_pifpaf_style.json -O ./openpifpaf_wholebody/data-mscoco/annotations
-wget https://github.com/DuncanZauss/openpifpaf_assets/releases/download/v0.1.0/person_keypoints_val2017_wholebody_pifpaf_style.json -O ./openpifpaf_wholebody/data-mscoco/annotations
-```
-Note: The pifpaf style annotation files were create with [Get_annotations_from_coco_wholebody.py](/Helper_scripts/Get_annotations_from_coco_wholebody.py). If you want to create your own annotation files from coco wholebody, you need to download the original files from the [Coco Whole body page](https://github.com/jin-s13/COCO-WholeBody#download) and then create the pifpaf readable json files with [Get_annotations_from_coco_wholebody.py](/Helper_scripts/Get_annotations_from_coco_wholebody.py). This can be useful if you for example only want to use a subset of images for training.
-
 ## Show poses
 Visualize the human poses with 133 keypoints.
 ```
