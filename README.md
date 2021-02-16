@@ -17,7 +17,7 @@ pip3 install openpifpaf_wholebody
 ```
 This will also automatically install openpifpaf, if it is not already installed.
 
-## Show poses
+## Visualize the skeleton
 Visualize the human poses with 133 keypoints.
 ```
 python -m openpifpaf_wholebody.src.constants
@@ -38,11 +38,15 @@ wget https://github.com/DuncanZauss/openpifpaf_assets/releases/download/v0.1.0/p
 Note: The pifpaf style annotation files were create with [Get_annotations_from_coco_wholebody.py](/openpifpaf_wholebody/Helper_scripts/Get_annotations_from_coco_wholebody.py). If you want to create your own annotation files from coco wholebody, you need to download the original files from the [Coco Whole body page](https://github.com/jin-s13/COCO-WholeBody#download) and then create the pifpaf readable json files with [Get_annotations_from_coco_wholebody.py](/openpifpaf_wholebody/Helper_scripts/Get_annotations_from_coco_wholebody.py). This can be useful if you for example only want to use a subset of images for training.
 
 Finally you can train the model (Note: This can take several days, even on the good GPUs):<br/>
-`time CUDA_VISIBLE_DEVICES=0 python3 -m openpifpaf.train --lr=0.0003 --momentum=0.95 --b-scale=3.0 --epochs=150 --lr-decay 130 140 --lr-decay-epochs=10 --batch-size=16 --weight-decay=1e-5 --dataset=wholebodykp --wholebodykp-upsample=2 --basenet=shufflenetv2k16 --loader-workers=16 --wholebodykp-train-annotations=<PathToYourMSCOCO>/data-mscoco/annotations/person_keypoints_train2017_wholebody_pifpaf_style.json --wholebodykp-val-annotations=<PathToYourMSCOCO>/data-mscoco/annotations/person_keypoints_val2017_wholebody_pifpaf_style.json --wholebodykp-train-image-dir=<COCO_train_image_dir> --wholebodykp-val-image-dir=<COCO_val_image_dir>`
+```
+time CUDA_VISIBLE_DEVICES=0 python3 -m openpifpaf.train --lr=0.0003 --momentum=0.95 --b-scale=3.0 --epochs=150 --lr-decay 130 140 --lr-decay-epochs=10 --batch-size=16 --weight-decay=1e-5 --dataset=wholebodykp --wholebodykp-upsample=2 --basenet=shufflenetv2k16 --loader-workers=16 --wholebodykp-train-annotations=<PathToYourMSCOCO>/data-mscoco/annotations/person_keypoints_train2017_wholebody_pifpaf_style.json --wholebodykp-val-annotations=<PathToYourMSCOCO>/data-mscoco/annotations/person_keypoints_val2017_wholebody_pifpaf_style.json --wholebodykp-train-image-dir=<COCO_train_image_dir> --wholebodykp-val-image-dir=<COCO_val_image_dir>
+```
 
 ## Evaluation
 To evaluate your network you can use the following command:<br/>
-`time CUDA_VISIBLE_DEVICES=0 python3 -m openpifpaf.eval --checkpoint=shufflenetv2k16-wholebody --force-complete-pose --seed-threshold=0.2 --loader-workers=16 --wholebodykp-val-annotations=<PathToYourMSCOCO>/data-mscoco/annotations/person_keypoints_val2017_wholebody_pifpaf_style.json --wholebodykp-val-image-dir=<COCO_val_image_dir>`
+```
+time CUDA_VISIBLE_DEVICES=0 python3 -m openpifpaf.eval --checkpoint=shufflenetv2k16-wholebody --force-complete-pose --seed-threshold=0.2 --loader-workers=16 --wholebodykp-val-annotations=<PathToYourMSCOCO>/data-mscoco/annotations/person_keypoints_val2017_wholebody_pifpaf_style.json --wholebodykp-val-image-dir=<COCO_val_image_dir>
+```
 
 ## Using only a subset of keypoints
 If you only want to train on a subset of keypoints, e.g. if you do not need the facial keypoints and only want to train on the body, foot and hand keypoints, it should be fairly easy to just train on this subset. You will need to:
