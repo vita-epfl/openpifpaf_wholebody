@@ -56,3 +56,8 @@ If you only want to train on a subset of keypoints, e.g. if you do not need the 
 
 ## Further informations
 For more information refer to the [Pifpaf Dev Guide](https://vita-epfl.github.io/openpifpaf/dev/intro.html).
+
+## License
+© 2021 Duncan Zauss
+
+This repository is licensed under the GNU AGPLv3 license. For more information refer to the LICENSE file.
