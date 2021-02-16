@@ -20,7 +20,7 @@ This will also automatically install openpifpaf, if it is not already installed.
 ## Visualize the skeleton
 Visualize the human poses with 133 keypoints.
 ```
-python -m openpifpaf_wholebody.src.constants
+python -m openpifpaf_wholebody.constants
 ```
 
 ## Predict
