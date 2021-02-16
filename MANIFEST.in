@@ -1,0 +1,4 @@
+include LICENSE
+recursive-include docs *.jpeg
+recursive-include docs *.png
+recursive-include openpifpaf_wholebody *.py
