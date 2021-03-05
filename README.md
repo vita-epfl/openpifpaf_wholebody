@@ -11,7 +11,7 @@ python -m openpifpaf.predict 0001soccer.jpeg --checkpoint=shufflenetv2k30-wholeb
 ![Skeleton](/docs/skeleton_wholebody.png)
 
 ## Install via pip
-You can use pip to install openpifpaf wholebody. From the openpifpaf_wholebody folder run:
+You can use pip to install openpifpaf wholebody:
 ```
 pip3 install openpifpaf_wholebody
 ```
@@ -25,7 +25,7 @@ python -m openpifpaf_wholebody.constants
 
 ## Predict
 Use the pretrained model to perform a prediction:<br/>
-`python -m openpifpaf.predict ./openpifpaf_wholebody/docs/0001basketball.jpeg --checkpoint=shufflenetv2k30-wholebody --show --line-width=1 --decoder=cifcaf:0`
+`python -m openpifpaf.predict 0001soccer.jpeg --checkpoint=shufflenetv2k30-wholebody --show --line-width=1 --decoder=cifcaf:0`
 <br/> <br/> Note that `--decoder=cifcaf:0` has to be used to use the first decoder. As the pretrained model was trained on two datasets to achieve better performance, it has two decoders.
 
 ## Train

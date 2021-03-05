@@ -80,9 +80,6 @@ class WholeBodyKp(DataModule):
                            default=cls.train_image_dir)
         group.add_argument('--wholebodykp-val-image-dir',
                            default=cls.val_image_dir)
-        group.add_argument('--wholebodykp-eval-only-body-kps',
-                           default=False, action='store_true',
-                           help='Evaluate only on the 17 kps of the body without the all the other kps. Set val dir and annotations accordingly.')
         
         group.add_argument('--wholebodykp-square-edge',
                            default=cls.square_edge, type=int,
@@ -144,7 +141,6 @@ class WholeBodyKp(DataModule):
         cls.train_image_dir = args.wholebodykp_train_image_dir
         cls.val_image_dir = args.wholebodykp_val_image_dir
         cls.eval_image_dir = cls.val_image_dir
-        cls.only_body_kps = args.wholebodykp_eval_only_body_kps
 
         cls.square_edge = args.wholebodykp_square_edge
         cls.extended_scale = args.wholebodykp_extended_scale
@@ -303,21 +299,43 @@ class WholeBodyKp(DataModule):
             collate_fn=collate_images_anns_meta)
 
     def metrics(self):
-        if self.only_body_kps:
-            return [WholeBodyMetric(
-                pycocotools.coco.COCO(self.eval_annotations),
-                max_per_image=20,
-                category_ids=[1],
-                iou_type='keypoints',
-                keypoint_oks_sigmas = None,
-                kps_select = "only_body")
-                ]
-        else:
-            return [WholeBodyMetric(
-                pycocotools.coco.COCO(self.eval_annotations),
-                max_per_image=20,
-                category_ids=[1],
-                iou_type='keypoints',
-                keypoint_oks_sigmas = WHOLEBODY_SIGMAS,
-                kps_select = "all")
-                ]
+        return [WholeBodyMetric(
+            self.eval_annotations,
+            max_per_image=20,
+            category_ids=[1],
+            iou_type='keypoints',
+            keypoint_oks_sigmas = WHOLEBODY_SIGMAS[0:17],
+            kps_select = "only_body"),
+            
+            WholeBodyMetric(
+            self.eval_annotations,
+            max_per_image=20,
+            category_ids=[1],
+            iou_type='keypoints',
+            keypoint_oks_sigmas = WHOLEBODY_SIGMAS[17:23],
+            kps_select = "only_feet"),
+            
+            WholeBodyMetric(
+            self.eval_annotations,
+            max_per_image=20,
+            category_ids=[1],
+            iou_type='keypoints',
+            keypoint_oks_sigmas = WHOLEBODY_SIGMAS[23:91],
+            kps_select = "only_face"),
+            
+            WholeBodyMetric(
+            self.eval_annotations,
+            max_per_image=20,
+            category_ids=[1],
+            iou_type='keypoints',
+            keypoint_oks_sigmas = WHOLEBODY_SIGMAS[91:133],
+            kps_select = "only_hands"),
+            
+            WholeBodyMetric(
+            self.eval_annotations,
+            max_per_image=20,
+            category_ids=[1],
+            iou_type='keypoints',
+            keypoint_oks_sigmas = WHOLEBODY_SIGMAS,
+            kps_select = "all")
+            ]
