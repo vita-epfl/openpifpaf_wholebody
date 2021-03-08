@@ -4,7 +4,8 @@ import torch
 
 from openpifpaf.datasets import DataModule
 from openpifpaf import encoder, headmeta, transforms
-from .wholebody_metrics import WholeBodyMetric
+from .wholebody_metrics_wb_protocoll import WholeBodyMetric_wb_protocoll
+#from .wholebody_metrics import WholeBodyMetric
 from openpifpaf.plugins.coco import CocoDataset as Coco
 from openpifpaf.datasets import collate_images_anns_meta, collate_images_targets_meta
 from .constants import (
@@ -30,7 +31,7 @@ class WholeBodyKp(DataModule):
 
     # cli configurable
     train_annotations = 'openpifpaf_wholebody/data-mscoco/annotations/person_keypoints_train2017_wholebody_pifpaf_style.json'
-    val_annotations = 'openpifpaf_wholebody/data-mscoco/annotations/person_keypoints_val2017_wholebody_pifpaf_style.json'
+    val_annotations = 'openpifpaf_wholebody/data-mscoco/annotations_wholebody/coco_wholebody_val_v1.0.json'
     train_image_dir = 'openpifpaf_wholebody/data-mscoco/images/train2017/'
     val_image_dir = 'openpifpaf_wholebody/data-mscoco/images/val2017'
      
@@ -299,43 +300,51 @@ class WholeBodyKp(DataModule):
             collate_fn=collate_images_anns_meta)
 
     def metrics(self):
-        return [WholeBodyMetric(
+        return [WholeBodyMetric_wb_protocoll(
             self.eval_annotations,
-            max_per_image=20,
-            category_ids=[1],
-            iou_type='keypoints',
-            keypoint_oks_sigmas = WHOLEBODY_SIGMAS[0:17],
-            kps_select = "only_body"),
-            
-            WholeBodyMetric(
-            self.eval_annotations,
-            max_per_image=20,
-            category_ids=[1],
-            iou_type='keypoints',
-            keypoint_oks_sigmas = WHOLEBODY_SIGMAS[17:23],
-            kps_select = "only_feet"),
-            
-            WholeBodyMetric(
-            self.eval_annotations,
-            max_per_image=20,
-            category_ids=[1],
-            iou_type='keypoints',
-            keypoint_oks_sigmas = WHOLEBODY_SIGMAS[23:91],
-            kps_select = "only_face"),
-            
-            WholeBodyMetric(
-            self.eval_annotations,
-            max_per_image=20,
-            category_ids=[1],
-            iou_type='keypoints',
-            keypoint_oks_sigmas = WHOLEBODY_SIGMAS[91:133],
-            kps_select = "only_hands"),
-            
-            WholeBodyMetric(
-            self.eval_annotations,
-            max_per_image=20,
-            category_ids=[1],
-            iou_type='keypoints',
-            keypoint_oks_sigmas = WHOLEBODY_SIGMAS,
-            kps_select = "all")
-            ]
+             max_per_image=20,
+             category_ids=[1],
+             iou_type='keypoints'
+            )]
+# =============================================================================
+#         return [WholeBodyMetric(
+#             self.eval_annotations,
+#             max_per_image=20,
+#             category_ids=[1],
+#             iou_type='keypoints',
+#             keypoint_oks_sigmas = WHOLEBODY_SIGMAS[0:17],
+#             kps_select = "only_body"),
+#             
+#             WholeBodyMetric(
+#             self.eval_annotations,
+#             max_per_image=20,
+#             category_ids=[1],
+#             iou_type='keypoints',
+#             keypoint_oks_sigmas = WHOLEBODY_SIGMAS[17:23],
+#             kps_select = "only_feet"),
+#             
+#             WholeBodyMetric(
+#             self.eval_annotations,
+#             max_per_image=20,
+#             category_ids=[1],
+#             iou_type='keypoints',
+#             keypoint_oks_sigmas = WHOLEBODY_SIGMAS[23:91],
+#             kps_select = "only_face"),
+#             
+#             WholeBodyMetric(
+#             self.eval_annotations,
+#             max_per_image=20,
+#             category_ids=[1],
+#             iou_type='keypoints',
+#             keypoint_oks_sigmas = WHOLEBODY_SIGMAS[91:133],
+#             kps_select = "only_hands"),
+#             
+#             WholeBodyMetric(
+#             self.eval_annotations,
+#             max_per_image=20,
+#             category_ids=[1],
+#             iou_type='keypoints',
+#             keypoint_oks_sigmas = WHOLEBODY_SIGMAS,
+#             kps_select = "all")
+#             ]
+# =============================================================================

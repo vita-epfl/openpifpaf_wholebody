@@ -1,8 +1,10 @@
 import logging
 import json
 import zipfile
+import copy
 
 import numpy as np
+from .evaluation_wb import test_body, test_face, test_foot, test_lefthand, test_righthand, test_wholebody
 
 from openpifpaf.metric.base import Base
 
@@ -16,7 +18,7 @@ except ImportError:
 
 LOG = logging.getLogger(__name__)
 
-class WholeBodyMetric(Base):
+class WholeBodyMetric_wb_protocoll(Base):
     text_labels_keypoints = ['AP', 'AP0.5', 'AP0.75', 'APM', 'APL',
                              'AR', 'AR0.5', 'AR0.75', 'ARM', 'ARL']
     text_labels_bbox = ['AP', 'AP0.5', 'AP0.75', 'APS', 'APM', 'APL',
@@ -27,8 +29,7 @@ class WholeBodyMetric(Base):
                  category_ids=None,
                  iou_type='keypoints',
                  small_threshold=0.0,
-                 keypoint_oks_sigmas=None,
-                 kps_select = "all"):
+                 keypoint_oks_sigmas=None):
         super().__init__()
 
         if category_ids is None:
@@ -39,18 +40,12 @@ class WholeBodyMetric(Base):
         self.iou_type = iou_type
         self.small_threshold = small_threshold
         self.keypoint_oks_sigmas = keypoint_oks_sigmas
-        self.kps_select = kps_select
-
+        
         self.predictions = []
         self.image_ids = []
         self.eval = None
         self.coco = pycocotools.coco.COCO(coco)
-# =============================================================================
-#         if self.kps_select=='only_body':
-#             # assert len(self.coco.anns[self.coco.anns.keys()[0]]['keypoints'])==17, "When evaluating only body, please provide an annotation val file with only the 17 body kps"
-#             for count in range(len(self.coco.anns)):
-#                 self.coco.anns[count+1]['keypoints']=self.coco.anns[count+1]['keypoints'][0:51]
-# =============================================================================
+        
 
         if self.iou_type == 'keypoints':# or self.iou_type == 'body_and_foot_keypoints' or self.iou_type == 'only_body_keypoints':
             self.text_labels = self.text_labels_keypoints
@@ -70,54 +65,23 @@ class WholeBodyMetric(Base):
             image_ids = self.image_ids
 
         coco_eval = self.coco.loadRes(predictions)
+                
+        for count in coco_eval.anns:
+            ann_orig = copy.deepcopy(coco_eval.anns[count])
+            coco_eval.anns[count]["lefthand_kpts"] = ann_orig["keypoints"][91*3:112*3]
+            coco_eval.anns[count]["righthand_kpts"] = ann_orig["keypoints"][112*3:133*3]
+            coco_eval.anns[count]["face_kpts"] = ann_orig["keypoints"][23*3:91*3]
+            coco_eval.anns[count]["foot_kpts"] = ann_orig["keypoints"][17*3:23*3]
+            coco_eval.anns[count]["keypoints"] = ann_orig["keypoints"][0:17*3] 
         
-        self.eval = COCOeval(self.coco, coco_eval, iouType=self.iou_type)
-        LOG.info('cat_ids: %s', self.category_ids)
-        if self.category_ids:
-            self.eval.params.catIds = self.category_ids
-        if self.keypoint_oks_sigmas is not None:
-            self.eval.params.kpt_oks_sigmas = np.asarray(self.keypoint_oks_sigmas)
-
-        if image_ids is not None:
-            print('image ids', image_ids)
-            self.eval.params.imgIds = image_ids
-        if self.kps_select=='only_body':
-            text = "Results for considering ONLY body keypoints"
-            # assert len(self.coco.anns[self.coco.anns.keys()[0]]['keypoints'])==17, "When evaluating only body, please provide an annotation val file with only the 17 body kps"
-            for ind in self.eval.cocoGt.anns:
-                self.eval.cocoGt.anns[ind]["keypoints"]=self.eval.cocoGt.anns[ind]["keypoints"][0:17*3]
-            for ind in self.eval.cocoDt.anns:
-                self.eval.cocoDt.anns[ind]["keypoints"]=self.eval.cocoDt.anns[ind]["keypoints"][0:17*3]
-        elif self.kps_select=='only_feet':
-            text = "Results for considering ONLY feet keypoints"
-            # assert len(self.coco.anns[self.coco.anns.keys()[0]]['keypoints'])==17, "When evaluating only body, please provide an annotation val file with only the 17 body kps"
-            for ind in self.eval.cocoGt.anns:
-                self.eval.cocoGt.anns[ind]["keypoints"]=self.eval.cocoGt.anns[ind]["keypoints"][17*3:23*3]
-            for ind in self.eval.cocoDt.anns:
-                self.eval.cocoDt.anns[ind]["keypoints"]=self.eval.cocoDt.anns[ind]["keypoints"][17*3:23*3]
-        elif self.kps_select=='only_face':
-            text = "Results for considering ONLY face keypoints"
-            # assert len(self.coco.anns[self.coco.anns.keys()[0]]['keypoints'])==17, "When evaluating only body, please provide an annotation val file with only the 17 body kps"
-            for ind in self.eval.cocoGt.anns:
-                self.eval.cocoGt.anns[ind]["keypoints"]=self.eval.cocoGt.anns[ind]["keypoints"][23*3:91*3]
-            for ind in self.eval.cocoDt.anns:
-                self.eval.cocoDt.anns[ind]["keypoints"]=self.eval.cocoDt.anns[ind]["keypoints"][23*3:91*3]
-        elif self.kps_select=='only_hands':
-            text = "Results for considering ONLY hand keypoints"
-            # assert len(self.coco.anns[self.coco.anns.keys()[0]]['keypoints'])==17, "When evaluating only body, please provide an annotation val file with only the 17 body kps"
-            for ind in self.eval.cocoGt.anns:
-                self.eval.cocoGt.anns[ind]["keypoints"]=self.eval.cocoGt.anns[ind]["keypoints"][91*3:133*3]
-            for ind in self.eval.cocoDt.anns:
-                self.eval.cocoDt.anns[ind]["keypoints"]=self.eval.cocoDt.anns[ind]["keypoints"][91*3:133*3]
-        elif self.kps_select=='all':
-            text = "Results for considering all 133 keypoints"
-        else:
-            raise Exception('Keypoints for evaluation need to be specified: only_body or all')
-        self.eval.evaluate()
-        LOG.info("\n\n#########   "+text+"   ######### \n")
-        self.eval.accumulate()
-        self.eval.summarize()
-        return self.eval.stats
+        test_body(self.coco, coco_eval)
+        test_foot(self.coco, coco_eval)
+        test_face(self.coco, coco_eval)
+        test_lefthand(self.coco, coco_eval)
+        test_righthand(self.coco, coco_eval)
+        stats = test_wholebody(self.coco, coco_eval)
+        
+        return stats
 
     # pylint: disable=unused-argument
     def accumulate(self, predictions, image_meta, *, ground_truth=None):
@@ -163,6 +127,17 @@ class WholeBodyMetric(Base):
              if k in ('image_id', 'category_id', 'keypoints', 'score')}
             for annotation in self.predictions
         ]
+        predictions_wb = copy.deepcopy(predictions)
+        for ann in predictions_wb:
+            ann_orig = copy.deepcopy(ann)
+            ann["lefthand_kpts"] = ann_orig["keypoints"][91*3:112*3]
+            ann["righthand_kpts"] = ann_orig["keypoints"][112*3:133*3]
+            ann["face_kpts"] = ann_orig["keypoints"][23*3:91*3]
+            ann["foot_kpts"] = ann_orig["keypoints"][17*3:23*3]
+            ann["keypoints"] = ann_orig["keypoints"][0:17*3]
+        with open(filename + '.pred_wb.json', 'w') as f:
+            json.dump(predictions_wb, f)
+        LOG.info('wrote %s.pred_wb.json', filename)
         with open(filename + '.pred.json', 'w') as f:
             json.dump(predictions, f)
         LOG.info('wrote %s.pred.json', filename)

@@ -1,0 +1,1 @@
+from .evaluation_wholebody import test_body, test_face, test_foot, test_lefthand, test_righthand, test_wholebody
