@@ -1,3 +1,6 @@
+# Important note: No further maintenance
+OpenPifPaf WholeBody is now part of the [OpenPifPaf main implementation](https://github.com/vita-epfl/openpifpaf) and you can find the respective guide [here](https://openpifpaf.github.io/plugins_wholebody.html). Thus, this repo is no longer maintained.
+
 # openpifpaf_wholebody
 This is an extension to [Pifpaf](https://github.com/vita-epfl/openpifpaf) to detect body, foot, face and hand keypoints, which sum up to 133 keypoints per person. The annotations for these keypoints are taken from the [COCO WholeBody dataset](https://github.com/jin-s13/COCO-WholeBody). <br/> Example outputs and skeleton:
 ![Soccer players with superimposed predictions](/docs/0001soccer.jpeg.predictions.png)
